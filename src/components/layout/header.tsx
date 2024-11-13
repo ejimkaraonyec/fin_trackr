@@ -4,6 +4,7 @@ import { Activity, FileText, Home, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { layoutVariants } from "@/components/shell";
 import { cn } from "@/lib/utils";
 
 type Props = React.HTMLAttributes<HTMLElement> & {};
@@ -20,12 +21,14 @@ const Header = ({ className, ...props }: Props) => {
   return (
     <header
       className={cn(
-        "fixed bottom-4 inset-x-0 z-50 container max-w-screen-md",
+        layoutVariants({
+          className: "sticky bottom-0 inset-x-0 z-50 pt-0 sm:pt-0",
+        }),
         className
       )}
       {...props}
     >
-      <nav className="grid grid-cols-4 rounded-lg bg-muted p-1 text-muted-foreground">
+      <nav className="grid grid-cols-4 rounded-lg bg-muted p-1 text-muted-foreground min-h-12">
         {links.map(({ label, href, icon: Icon }) => (
           <Link
             key={href}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { layoutVariants } from "@/components/shell";
 import {
   Card,
   CardContent,
@@ -148,7 +149,7 @@ export default function FinTracker() {
   };
 
   return (
-    <main className="space-y-4">
+    <main className={cn(layoutVariants({ className: "space-y-4" }))}>
       {/* Income Section */}
       <Card className="bg-blue-50">
         <CardHeader>

@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
   font-family: Arial, Helvetica, sans-serif;
-}
+} */
 
 @layer base {
   :root {
@@ -91,5 +91,11 @@ body {
 
   blockquote {
     @apply mt-6 border-l-2 pl-6 italic;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    @apply px-2.5;
   }
 }

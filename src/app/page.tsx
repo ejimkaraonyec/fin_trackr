@@ -1,84 +1,89 @@
 "use client";
 
+import { layoutVariants } from "@/components/shell";
 import { useTelegramWebApp } from "@/hooks/use-telegram-web-app";
-import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
+// const userData = { first_name: "RD", username: "ritchmont", photo_url: "" };
 export default function Home() {
   const webApp = useTelegramWebApp();
-  const [isNavOpen, setIsNavOpen] = useState(false);
+  const userData = webApp?.initDataUnsafe.user;
 
   useEffect(() => {
     if (webApp) {
-      // Configure MainButton as navigation trigger
-      webApp.MainButton.setText("MENU");
-      webApp.MainButton.show();
-
-      const handleMainButtonClick = () => {
-        setIsNavOpen((prev) => !prev);
-        if (!isNavOpen) {
-          webApp.MainButton.setText("CLOSE MENU");
-        } else {
-          webApp.MainButton.setText("MENU");
-        }
-      };
-
-      webApp.MainButton.onClick(handleMainButtonClick);
-
-      return () => {
-        webApp.MainButton.offClick(handleMainButtonClick);
-      };
+      // Configure initial Telegram WebApp settings
+      webApp.expand(); // Expand the app by default for better visibility
+      webApp.MainButton.hide(); // Hide the MainButton since we're using custom navigation
     }
-  }, [webApp, isNavOpen]);
-
-  const userData = webApp?.initDataUnsafe.user;
+  }, [webApp]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      {/* Main content with bottom padding to avoid MainButton overlap */}
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm p-24 pb-32">
-        <h1 className="text-2xl font-bold mb-4">Telegram Mini App</h1>
-
-        {userData && (
-          <div className="bg-white/30 p-4 rounded-lg backdrop-blur-sm">
-            <p>Welcome, {userData.first_name}!</p>
-            {userData.username && <p>@{userData.username}</p>}
-          </div>
-        )}
-
-        <div className="mt-8 space-y-4">
-          <button
-            onClick={() => webApp?.expand()}
-            className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg"
-          >
-            Expand App
-          </button>
+    <main className={cn(layoutVariants())}>
+      {/* User Welcome Section */}
+      {userData && (
+        <div className="mb-6">
+          <h1 className="text-xl font-semibold">
+            Welcome back, {userData.first_name}!
+          </h1>
+          <p className="text-muted-foreground">
+            Here&apos;s your financial overview
+          </p>
         </div>
+      )}
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 gap-4 mb-8">
+        <QuickActionCard title="Monthly Goal" value="₦50,000" progress={65} />
+        <QuickActionCard
+          title="Available Balance"
+          value="₦123,456"
+          subtext="Virtual Account"
+        />
       </div>
 
-      {/* Navigation Menu (slides up when MainButton is clicked) */}
-      {isNavOpen && (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm transform transition-transform duration-300 pb-20">
-          <div className="max-w-5xl mx-auto p-4">
-            <ul className="space-y-4">
-              <li>
-                <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg">
-                  Home
-                </button>
-              </li>
-              <li>
-                <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg">
-                  Profile
-                </button>
-              </li>
-              <li>
-                <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg">
-                  Settings
-                </button>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      )}
+      {/* Activity Overview */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">Recent Activity</h2>
+        {/* <ActivityChart /> */}
+      </section>
     </main>
   );
 }
+
+interface QuickActionCardProps {
+  title: string;
+  value: string;
+  progress?: number;
+  subtext?: string;
+}
+
+const QuickActionCard = ({
+  title,
+  value,
+  progress,
+  subtext,
+}: QuickActionCardProps) => {
+  return (
+    <div className="p-4 rounded-lg bg-card border shadow-sm">
+      <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
+      <p className="text-2xl font-bold mt-1">{value}</p>
+      {progress !== undefined && (
+        <div className="mt-2">
+          <div className="h-2 bg-muted rounded-full">
+            <div
+              className="h-full bg-primary rounded-full transition-all"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            {progress}% achieved
+          </p>
+        </div>
+      )}
+      {subtext && (
+        <p className="text-xs text-muted-foreground mt-1">{subtext}</p>
+      )}
+    </div>
+  );
+};
