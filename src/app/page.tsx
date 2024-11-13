@@ -1,22 +1,25 @@
 "use client";
 
 import { useTelegramWebApp } from "@/hooks/use-telegram-web-app";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const webApp = useTelegramWebApp();
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   useEffect(() => {
     if (webApp) {
-      // Configure MainButton
-      webApp.MainButton.setText("MAIN BUTTON");
+      // Configure MainButton as navigation trigger
+      webApp.MainButton.setText("MENU");
       webApp.MainButton.show();
 
-      // Example of handling button click
       const handleMainButtonClick = () => {
-        webApp.MainButton.showProgress(false);
-        // Add your logic here
-        webApp.MainButton.hideProgress();
+        setIsNavOpen((prev) => !prev);
+        if (!isNavOpen) {
+          webApp.MainButton.setText("CLOSE MENU");
+        } else {
+          webApp.MainButton.setText("MENU");
+        }
       };
 
       webApp.MainButton.onClick(handleMainButtonClick);
@@ -25,13 +28,14 @@ export default function Home() {
         webApp.MainButton.offClick(handleMainButtonClick);
       };
     }
-  }, [webApp]);
+  }, [webApp, isNavOpen]);
 
   const userData = webApp?.initDataUnsafe.user;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
+    <main className="flex min-h-screen flex-col items-center justify-between">
+      {/* Main content with bottom padding to avoid MainButton overlap */}
+      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm p-24 pb-32">
         <h1 className="text-2xl font-bold mb-4">Telegram Mini App</h1>
 
         {userData && (
@@ -48,15 +52,33 @@ export default function Home() {
           >
             Expand App
           </button>
-
-          <button
-            onClick={() => webApp?.close()}
-            className="w-full px-4 py-2 border border-blue-500 text-blue-500 rounded-lg"
-          >
-            Close App
-          </button>
         </div>
       </div>
+
+      {/* Navigation Menu (slides up when MainButton is clicked) */}
+      {isNavOpen && (
+        <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm transform transition-transform duration-300 pb-20">
+          <div className="max-w-5xl mx-auto p-4">
+            <ul className="space-y-4">
+              <li>
+                <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg">
+                  Home
+                </button>
+              </li>
+              <li>
+                <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg">
+                  Profile
+                </button>
+              </li>
+              <li>
+                <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg">
+                  Settings
+                </button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      )}
     </main>
   );
 }
