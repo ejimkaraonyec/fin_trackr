@@ -2,7 +2,6 @@
 
 // import { Dot, Eye } from "lucide-react";
 import { GanttChart, Smartphone, UserRoundPlus } from "lucide-react";
-import { useEffect } from "react";
 
 import { Cards } from "@/app/_comp/cards";
 import { VirtualAccount } from "@/app/_comp/virtual-account";
@@ -15,20 +14,6 @@ import { cn } from "@/lib/utils";
 export default function Home() {
   const webApp = useTelegramWebApp();
   const userData = webApp?.initDataUnsafe.user;
-
-  useEffect(() => {
-    // if (webApp) {
-    //   // Configure initial Telegram WebApp settings
-    //   webApp.expand(); // Expand the app by default for better visibility
-    //   webApp.MainButton.hide(); // Hide the MainButton since we're using custom navigation
-    // }
-    if (webApp) {
-      fetch(`/api/sendLaunchButton?chat_id=${userData?.id}`)
-        .then((res) => res.json())
-        .then((data) => console.log("Launch button sent:", data))
-        .catch((error) => console.error("Error sending launch button:", error));
-    }
-  }, [webApp, userData]);
 
   return (
     <main className={cn(layoutVariants(), "space-y-3 sm:space-y-4")}>

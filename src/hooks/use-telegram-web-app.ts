@@ -7,16 +7,12 @@ export const useTelegramWebApp = () => {
 
   useEffect(() => {
     const app = initializeWebApp();
-    // if (app) {
-    //   setWebApp(app);
-    //   app.ready();
-    // }
-
-    setWebApp(app);
-
     if (app) {
-      app.expand(); // Expands the app by default
-      app.MainButton.hide(); // Hides Telegram's default MainButton
+      setWebApp(app);
+      app.ready();
+
+      app.expand(); // Expand the app by default for better visibility
+      app.MainButton.hide(); // Hide the MainButton since we're using custom navigation
     }
   }, []);
 
