@@ -17,12 +17,18 @@ export default function Home() {
   const userData = webApp?.initDataUnsafe.user;
 
   useEffect(() => {
+    // if (webApp) {
+    //   // Configure initial Telegram WebApp settings
+    //   webApp.expand(); // Expand the app by default for better visibility
+    //   webApp.MainButton.hide(); // Hide the MainButton since we're using custom navigation
+    // }
     if (webApp) {
-      // Configure initial Telegram WebApp settings
-      webApp.expand(); // Expand the app by default for better visibility
-      webApp.MainButton.hide(); // Hide the MainButton since we're using custom navigation
+      fetch(`/api/sendLaunchButton?chat_id=${userData?.id}`)
+        .then((res) => res.json())
+        .then((data) => console.log("Launch button sent:", data))
+        .catch((error) => console.error("Error sending launch button:", error));
     }
-  }, [webApp]);
+  }, [webApp, userData]);
 
   return (
     <main className={cn(layoutVariants(), "space-y-3 sm:space-y-4")}>
@@ -34,41 +40,6 @@ export default function Home() {
       )}
 
       {/* Quick Actions */}
-      {/* <section
-        className={cn(
-          layoutVariants({ variant: "card" }),
-          "grid-cols-3 md:grid-cols-3"
-        )}
-      >
-        <Card>
-          <CardHeader>
-            <CardTitle>Premier</CardTitle>
-            <CardDescription className="inline-flex items-center">
-              0546854587 <Dot className="size-4" /> Virtual Account
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex gap-1.5 items-end justify-between">
-            <div className="inline-flex gap-1.5">
-              <Button
-                size={"icon"}
-                className="size-8 bg-chart-1/20 hover:bg-chart-1/40 rounded-full"
-              >
-                <Eye className="text-chart-1" />
-              </Button>
-              <Button size={"sm"} className="h-8" variant={"outline"}>
-                Fund
-              </Button>
-            </div>
-            <div>
-              <small className="text-xs text-muted-foreground">
-                Available Balance
-              </small>
-              <p className="font-medium">{formatNaira(200000)}</p>
-            </div>
-          </CardContent>
-        </Card>
-      </section> */}
-
       <section className={cn(layoutVariants({ variant: "card" }))}>
         {/* Virtual Account Card */}
         <VirtualAccount />
