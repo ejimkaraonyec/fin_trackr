@@ -1,9 +1,15 @@
 "use client";
 
+// import { Dot, Eye } from "lucide-react";
+import { GanttChart, Smartphone, UserRoundPlus } from "lucide-react";
+import { useEffect } from "react";
+
+import { Cards } from "@/app/_comp/cards";
+import { VirtualAccount } from "@/app/_comp/virtual-account";
 import { layoutVariants } from "@/components/shell";
+import { Button } from "@/components/ui/button";
 import { useTelegramWebApp } from "@/hooks/use-telegram-web-app";
 import { cn } from "@/lib/utils";
-import { useEffect } from "react";
 
 // const userData = { first_name: "RD", username: "ritchmont", photo_url: "" };
 export default function Home() {
@@ -19,71 +25,91 @@ export default function Home() {
   }, [webApp]);
 
   return (
-    <main className={cn(layoutVariants())}>
+    <main className={cn(layoutVariants(), "space-y-3 sm:space-y-4")}>
       {/* User Welcome Section */}
       {userData && (
-        <div className="mb-6">
-          <h1 className="text-xl font-semibold">
-            Welcome back, {userData.first_name}!
-          </h1>
-          <p className="text-muted-foreground">
-            Here&apos;s your financial overview
-          </p>
-        </div>
+        <h1 className="text-xl font-semibold">
+          Welcome, {userData.first_name}!
+        </h1>
       )}
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-2 gap-4 mb-8">
-        <QuickActionCard title="Monthly Goal" value="₦50,000" progress={65} />
-        <QuickActionCard
-          title="Available Balance"
-          value="₦123,456"
-          subtext="Virtual Account"
-        />
-      </div>
+      {/* <section
+        className={cn(
+          layoutVariants({ variant: "card" }),
+          "grid-cols-3 md:grid-cols-3"
+        )}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle>Premier</CardTitle>
+            <CardDescription className="inline-flex items-center">
+              0546854587 <Dot className="size-4" /> Virtual Account
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex gap-1.5 items-end justify-between">
+            <div className="inline-flex gap-1.5">
+              <Button
+                size={"icon"}
+                className="size-8 bg-chart-1/20 hover:bg-chart-1/40 rounded-full"
+              >
+                <Eye className="text-chart-1" />
+              </Button>
+              <Button size={"sm"} className="h-8" variant={"outline"}>
+                Fund
+              </Button>
+            </div>
+            <div>
+              <small className="text-xs text-muted-foreground">
+                Available Balance
+              </small>
+              <p className="font-medium">{formatNaira(200000)}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </section> */}
 
-      {/* Activity Overview */}
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Recent Activity</h2>
-        {/* <ActivityChart /> */}
+      <section className={cn(layoutVariants({ variant: "card" }))}>
+        {/* Virtual Account Card */}
+        <VirtualAccount />
+
+        {/* Quick Action Grid */}
+        <div className="md:col-span-2 grid grid-cols-3 items-center gap-3 rounded-lg border bg-card text-card-foreground shadow-sm p-4">
+          <Button
+            // variant="outline"
+            className="bg-chart-1/20 hover:bg-chart-1/40 text-chart-1 [&_svg]:size-7 py-4 h-auto flex-col"
+            onClick={() => {
+              /* handle airtime/data */
+            }}
+          >
+            <Smartphone />
+            Airtime / Data
+          </Button>
+
+          <Button
+            className="bg-chart-5/20 hover:bg-chart-5/40 text-chart-5 [&_svg]:size-7 py-4 h-auto flex-col"
+            onClick={() => {
+              /* handle new dependent */
+            }}
+          >
+            <UserRoundPlus />
+            New Dependent
+          </Button>
+
+          <Button
+            className="bg-chart-2/20 hover:bg-chart-2/40 text-chart-2 [&_svg]:size-7 py-4 h-auto flex-col"
+            onClick={() => {
+              /* handle new venture */
+            }}
+          >
+            <GanttChart />
+            New Venture
+          </Button>
+        </div>
       </section>
+
+      {/* Overview from the other pages/core features*/}
+      <Cards />
     </main>
   );
 }
-
-interface QuickActionCardProps {
-  title: string;
-  value: string;
-  progress?: number;
-  subtext?: string;
-}
-
-const QuickActionCard = ({
-  title,
-  value,
-  progress,
-  subtext,
-}: QuickActionCardProps) => {
-  return (
-    <div className="p-4 rounded-lg bg-card border shadow-sm">
-      <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
-      <p className="text-2xl font-bold mt-1">{value}</p>
-      {progress !== undefined && (
-        <div className="mt-2">
-          <div className="h-2 bg-muted rounded-full">
-            <div
-              className="h-full bg-primary rounded-full transition-all"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            {progress}% achieved
-          </p>
-        </div>
-      )}
-      {subtext && (
-        <p className="text-xs text-muted-foreground mt-1">{subtext}</p>
-      )}
-    </div>
-  );
-};

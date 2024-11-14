@@ -7,8 +7,17 @@ import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Mini",
-  description: "Telegram Mini App created with Next.js",
+  title: "FinTrack Pro",
+  description:
+    "A comprehensive financial management platform for budgeting, expense tracking, and project financial planning. Manage personal finances, track expenses, plan budgets, and monitor project costs all in one place.",
+  keywords: [
+    "financial management",
+    "budget planning",
+    "expense tracking",
+    "project finance",
+    "dependent accounts",
+    "bill payments",
+  ],
 };
 
 export default function RootLayout({
@@ -26,7 +35,7 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          "font-sans antialiased",
+          "grid grid-rows-[1fr_auto] min-h-screen font-sans antialiased",
           fontSans.variable,
           fontMono.variable
         )}

@@ -8,6 +8,7 @@ const layoutVariants = cva("", {
     variant: {
       // Base shell layouts
       container: "container",
+      card: "grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4",
       centered: cn(
         "container flex max-w-2xl flex-col justify-center",
         "min-h-[100vh] min-h-[100dvh]"
