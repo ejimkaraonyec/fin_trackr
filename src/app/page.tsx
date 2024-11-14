@@ -2,6 +2,7 @@
 
 // import { Dot, Eye } from "lucide-react";
 import { GanttChart, Smartphone, UserRoundPlus } from "lucide-react";
+import { useEffect } from "react";
 
 import { Cards } from "@/app/_comp/cards";
 import { VirtualAccount } from "@/app/_comp/virtual-account";
@@ -14,6 +15,13 @@ import { cn } from "@/lib/utils";
 export default function Home() {
   const webApp = useTelegramWebApp();
   const userData = webApp?.initDataUnsafe.user;
+
+  useEffect(() => {
+    if (webApp) {
+      webApp.expand();
+      webApp.MainButton.hide();
+    }
+  }, [webApp]);
 
   return (
     <main className={cn(layoutVariants(), "space-y-3 sm:space-y-4")}>

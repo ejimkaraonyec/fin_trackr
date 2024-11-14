@@ -10,9 +10,6 @@ export const useTelegramWebApp = () => {
     if (app) {
       setWebApp(app);
       app.ready();
-
-      app.expand(); // Expand the app by default for better visibility
-      app.MainButton.hide(); // Hide the MainButton since we're using custom navigation
     }
   }, []);
 
